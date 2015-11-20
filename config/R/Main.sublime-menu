@@ -15,7 +15,7 @@
                  "args": {
                     "type": "subprocess",
                     "external_id": "r",
-                    "additional_scopes": ["tex.latex.knitr"],
+                    "additional_scopes": ["tex.latex.knitr", "html.markdown.knitr"],
                     "encoding": {
                         "windows": "$win_cmd_encoding",
                         "linux": "utf8",
@@ -23,17 +23,17 @@
                         },
                     "soft_quit": "\nquit(save=\"no\")\n",
                     "cmd": {"linux": ["R", "--interactive", "--no-readline"],
-                            "osx": ["R", "--interactive", "--no-readline"],
+                            "osx": ["R", "--interactive", "--no-readline", "--encoding='UTF-8'"],
                             "windows": ["Rterm.exe", "--ess", "--encoding=$win_cmd_encoding"]},
                     "cwd": "$file_path",
-                    "extend_env": {"osx": {"PATH": "{PATH}:/usr/local/bin"},
+                    "extend_env": {"osx": {"PATH": "{PATH}:/usr/local/bin","LANG":"en_US.utf-8"},
                                    "linux": {"PATH": "{PATH}:/usr/local/bin"},
                                    "windows": {}},
                     "cmd_postfix": "\n",
                     "suppress_echo": {"osx": true,
                                       "linux": true,
                                       "windows": false},
-                    "syntax": "Packages/R/R Console.tmLanguage"
+                    "syntax": "Packages/R/R.tmLanguage"
                     }
                 }
             ]

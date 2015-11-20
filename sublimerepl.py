@@ -151,6 +151,7 @@ class PersistentHistory(MemHistory):
 class ReplView(object):
     def __init__(self, view, repl, syntax, repl_restart_args):
         self.repl = repl
+        self.id = repl.id
         self._view = view
         self._window = view.window()
         self._repl_launch_args = repl_restart_args
@@ -325,6 +326,17 @@ class ReplView(object):
             unistr = re.sub(r'.\x08', '', unistr)
 
         # string is assumed to be already correctly encoded
+        brstr = re.compile(r'[\r\n]{1,2}<.*(?= {24})')
+        try:
+            lchar = brstr.finditer(unistr)
+            for i in reversed(list(lchar)):
+                rchar = i.group(0)[-1]
+                unistr = brstr.sub(rchar, unistr)
+        except:
+            unistr=unistr
+        unistr = re.sub(r'\a',r'\t', unistr)
+        unistr = re.sub(r'\r',r'\n', unistr)
+        unistr = re.sub(r'                        ','',unistr)
         self._view.run_command("repl_insert_text", {"pos": self._output_end - self._prompt_size, "text": unistr})
         self._output_end += len(unistr)
         self._view.show(self.input_region)
@@ -464,15 +476,18 @@ class ReplManager(object):
         return rv
 
     def find_repl(self, external_id):
-        """Yields rvews matching external_id taken from source.[external_id] scope
-           Match is done on external_id value of repl and additional_scopes"""
         for rv in self.repl_views.values():
             if not (rv.repl and rv.repl.is_alive()):
                 continue  # dead repl, skip
-            rvid = rv.external_id
+            rveid = rv.external_id
+            rvid = rv.id
+            myviews = sublime.active_window().views()
+            replid = [v.settings().get('repl_id') for v in myviews if v.settings().get('repl_id')!=None][0]
             additional_scopes = rv.repl.additional_scopes
-            if rvid == external_id or external_id in additional_scopes:
-                yield rv
+            if rveid == external_id or external_id in additional_scopes:
+                ## THIS IS WHAT I ADDED TO GET WINDOW-SPECIFIC REPLS
+                if rvid == replid:
+                    yield rv
 
     def open(self, window, encoding, type, syntax=None, view_id=None, **kwds):
         repl_restart_args = {

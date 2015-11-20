@@ -84,7 +84,7 @@ class SubprocessRepl(Repl):
                         self._cmd,
                         startupinfo=self.startupinfo(settings),
                         creationflags=self.creationflags(settings),
-                        bufsize=1,
+                        bufsize=4096,
                         cwd=self.cwd(cwd, settings),
                         env=env,
                         stderr=subprocess.STDOUT,
@@ -252,4 +252,3 @@ class SubprocessRepl(Repl):
             self._killed = True
         if self.is_alive():
             self.popen.send_signal(sig)
-
