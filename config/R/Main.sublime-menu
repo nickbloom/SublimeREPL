@@ -15,7 +15,7 @@
                  "args": {
                     "type": "subprocess",
                     "external_id": "r",
-                    "additional_scopes": ["tex.latex.knitr", "html.markdown.knitr"],
+                    "additional_scopes": ["tex.latex.knitr", "html.markdown.knitr", "source.r"],
                     "encoding": {
                         "windows": "$win_cmd_encoding",
                         "linux": "utf8",

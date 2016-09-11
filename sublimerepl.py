@@ -563,6 +563,7 @@ class ReplManager(object):
             res["folder"] = window.folders()[0]
         res["editor"] = "subl -w"
         res["win_cmd_encoding"] = "utf8"
+        res["file_path"] = os.path.expanduser('~')
         if sublime.platform() == "windows":
             res["win_cmd_encoding"] = locale.getdefaultlocale()[1]
             res["editor"] = '"%s"' % (sys.executable,)
